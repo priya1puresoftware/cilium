@@ -87,4 +87,5 @@ jobs:
               source py38-venv/bin/activate && \
               python --version && \
               curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+              cat <<EOT > cilium.yaml && \
               deactivate'

@@ -7,8 +7,11 @@ on:
     branches:
       - master
       - ft/master/**
-      
+  issue_comment:
+    types:
+      - created  
 permissions: read-all
+
 
   
   ### FOR TESTING PURPOSES

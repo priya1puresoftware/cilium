@@ -258,12 +258,12 @@ jobs:
               bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
-              curl -sSL --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${{ env.cilium_cli_version }}/cilium-linux-amd64.tar.gz{,.sha256sum}
+              curl -sSL --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${{ env.cilium_cli_version }}/cilium-linux-arm64.tar.gz{,.sha256sum}
               sha256sum --check cilium-linux-arm64.tar.gz.sha256sum && \
               sudo tar xzvfC cilium-linux-arm64.tar.gz /usr/local/bin && \
               rm cilium-linux-arm64.tar.gz{,.sha256sum} && \
               cilium version && \
-              cd ${{ github.workspace }}/test/l4lb && sudo ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
-              cd ${{ github.workspace }}/test/nat46x64 && sudo ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
+              cd ${{ github.workspace }}/test/l4lb && ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
+              cd ${{ github.workspace }}/test/nat46x64 && ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
               cilium sysdump --output-filename cilium-sysdump-out && \
               deactivate'

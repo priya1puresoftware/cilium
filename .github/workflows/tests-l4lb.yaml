@@ -242,3 +242,27 @@ jobs:
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  armv64_job:
+      name: Build and Test for arm64
+      runs-on: ubuntu-20.04
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up QEMU
+          id: qemu
+          uses: docker/setup-qemu-action@v1
+        - name: Install and Run tests
+          run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+              arm64v8/ubuntu:20.04 \
+              bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
+              python3 -m pip install virtualenv && python3 -m venv py38-venv && \
+              source py38-venv/bin/activate && \
+              curl -sSL --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${{ env.cilium_cli_version }}/cilium-linux-amd64.tar.gz{,.sha256sum}
+              sha256sum --check cilium-linux-arm64.tar.gz.sha256sum && \
+              sudo tar xzvfC cilium-linux-arm64.tar.gz /usr/local/bin && \
+              rm cilium-linux-arm64.tar.gz{,.sha256sum} && \
+              cilium version && \
+              cd ${{ github.workspace }}/test/l4lb && sudo ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
+              cd ${{ github.workspace }}/test/nat46x64 && sudo ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
+              cilium sysdump --output-filename cilium-sysdump-out && \
+              deactivate'

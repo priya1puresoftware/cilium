@@ -4,7 +4,7 @@ name: Cilium L4LB XDP (ci-l4lb)
 on: 
   issue_comment:
     types:
-      - created 
+      - created   
  
 
 

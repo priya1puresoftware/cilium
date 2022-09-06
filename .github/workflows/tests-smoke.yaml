@@ -224,6 +224,9 @@ jobs:
               apt-get install helm && \
               make check-k8s-clusterrole && \
               export KUBECONFIG=~/.kube/config && \
+              mkdir ~/.kube && \
+              sudo k3s kubectl config view --raw | tee ~/.kube/config && \
+              chmod 600 ~/.kube/config && \
               helm upgrade -i cilium ./install/kubernetes/cilium && \
               --namespace kube-system && \
               --set nodeinit.enabled=true && \

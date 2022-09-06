@@ -265,5 +265,4 @@ jobs:
               cilium version && \  
               cd ${{ github.workspace }}/test/l4lb && ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
               cd ${{ github.workspace }}/test/nat46x64 && ./test.sh ${{ github.repository_owner}} ${{ steps.vars.outputs.sha }} ${{ github.workspace }}/pull-request/install/kubernetes/cilium && \
-              cilium sysdump --output-filename cilium-sysdump-out && \
               deactivate'

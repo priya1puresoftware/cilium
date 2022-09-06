@@ -217,6 +217,11 @@ jobs:
               bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
+              curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+              apt-get install apt-transport-https --yes && \
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
+              apt-get update && \
+              apt-get install helm && \
               helm upgrade -i cilium ./install/kubernetes/cilium && \
               --namespace kube-system && \
               --set nodeinit.enabled=true && \

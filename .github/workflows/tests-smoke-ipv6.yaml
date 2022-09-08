@@ -167,3 +167,29 @@ jobs:
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  armv64_job:
+      name: Build and Test for arm64
+      runs-on: ubuntu-20.04
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up QEMU
+          id: qemu
+          uses: docker/setup-qemu-action@v1
+        - name: Install and Run tests
+          run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+              arm64v8/ubuntu:20.04 \
+              bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
+              python3 -m pip install virtualenv && python3 -m venv py38-venv && \
+              source py38-venv/bin/activate && \
+              make -C examples/kubernetes/connectivity-check fmt && \
+              make -C examples/kubernetes/connectivity-check all && \
+              test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1) && \
+              sudo sh -c "echo '{ \"cgroup-parent\": \"/actions_job\", \"ipv6\": true, \"fixed-cidr-v6\": \"2001:db8:1::/64\" }' > /etc/docker/daemon.json"
+              sudo cat /etc/docker/daemon.json && \
+              sudo ip -6 route add 2001:db8:1::/64 dev docker0 && \
+              sudo sysctl net.ipv6.conf.default.forwarding=1 && \
+              sudo sysctl net.ipv6.conf.all.forwarding=1 && \
+              sudo systemctl restart docker && \
+              deactivate'
+              

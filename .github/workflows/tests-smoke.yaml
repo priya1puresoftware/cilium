@@ -173,7 +173,7 @@ jobs:
         if: ${{ failure() }}
         # The following is needed to prevent hubble from receiving an empty
         # file (EOF) on stdin and displaying no flows.
-        shell: 'script -q -e -c "bash --noprofile --norc -eo pipefail {0}"'
+        shell: script -q -e -c "bash --noprofile --norc -eo pipefail {0}"
         run: |
           echo "=== Install Cilium CLI ==="
           curl -sSL --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${{ env.cilium_cli_version }}/cilium-linux-amd64.tar.gz{,.sha256sum}

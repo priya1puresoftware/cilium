@@ -215,6 +215,6 @@ jobs:
               source py38-venv/bin/activate && \
               make check-k8s-clusterrole && \
               make -C examples/kubernetes/connectivity-check fmt && \
-              make -C examples/kubernetes/connectivity-check all && \
+              make -C examples/kubernetes/connectivity-check all && \ 
               test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1) && \
               deactivate'

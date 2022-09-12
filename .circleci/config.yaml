@@ -1,21 +1,22 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-orbs:
-  win: circleci/windows@2.4.0
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  
   build-medium-arm64:
-    machine:
-      image: ubuntu-2004:202101-01
-    resource_class: arm.medium
-    working_directory: ~/dash
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
-      - run: uname -a
-      - run: echo "Hello, Arm!"
-      
+      - checkout
       - run:
-          name: ️️🏗️ pip dev requirements
-          command: |
-            uname -m
+          name: test for arm64
+          command: 
             make -C examples/kubernetes/connectivity-check fmt
             make -C examples/kubernetes/connectivity-check all
             test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
@@ -57,9 +58,9 @@ jobs:
             kubectl apply -f ${{ env.CONFORMANCE_TEMPLATE }}
             kubectl wait --for=condition=Available --all deployment --timeout=${{ env.TIMEOUT }}
 
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  version: 2
-  python3.9:
+  build-medium-arm64:
     jobs:
-      - build-medium-arm64
-      
+      - say-hello

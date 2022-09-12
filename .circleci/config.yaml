@@ -63,4 +63,4 @@ jobs:
 workflows:
   build-medium-arm64:
     jobs:
-      - say-hello
+      - test for arm64

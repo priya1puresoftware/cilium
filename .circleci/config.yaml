@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-    
+    hello: circleci/hello-build@0.0.5
 jobs:
   
   build-medium-arm64:
@@ -59,7 +59,7 @@ jobs:
              kubectl wait --for=condition=Available --all deployment --timeout=${{ env.TIMEOUT }}
              
 workflows:
-  version: 2
+  version: 2.1
   go:
     jobs:
       

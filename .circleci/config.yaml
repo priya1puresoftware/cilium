@@ -4,14 +4,10 @@ orbs:
   go: circleci/go@1.7.1
   
 
-run:
-when: "branch =~ '.*' OR pull_request =~'.*'"  
+ 
 jobs:
   manylinux2014-aarch64:
-    parameters:
-      cibw_build:
-        type: string
-        default: "cp37-*"
+    
 
     machine:
       image: ubuntu-2004:202101-01
@@ -64,7 +60,4 @@ workflows:
   main:
     jobs:
       - manylinux2014-aarch64:
-          matrix:
-            parameters:
-              cibw_build:
-                - "cp37*"
+         

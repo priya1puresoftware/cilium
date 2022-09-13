@@ -3,19 +3,12 @@
 version: 2.1
 orbs:
   win: circleci/windows@2.4.0
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
+jobs: 
   build-medium-arm64:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     machine:
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
     working_directory: ~/cilium
-    docker:
-      - image: cimg/base:stable
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -67,6 +60,8 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  build-medium-arm64:
-    jobs:
-      - test for arm64
+  version: 2.1
+     jobs:
+       - build-medium-arm64
+ 
+    

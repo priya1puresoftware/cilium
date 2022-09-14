@@ -19,7 +19,6 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - run:  make -C examples/kubernetes/connectivity-check fmt
       - run:  make -C examples/kubernetes/connectivity-check all
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
       - run:  sudo cat /etc/docker/daemon.json

@@ -25,6 +25,11 @@ jobs:
       - run:  sudo sysctl net.ipv6.conf.default.forwarding=1
       - run:  sudo sysctl net.ipv6.conf.all.forwarding=1
       - run:  sudo systemctl restart docker
+      - run:  curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+      - run:  apt-get install apt-transport-https --yes && \
+      - run:  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
+      - run:  apt-get update && \
+      - run:  apt-get install helm && \
       - run:  helm upgrade -i cilium ./install/kubernetes/cilium \
       - run:  --namespace kube-system \
       - run:  --set nodeinit.enabled=true \

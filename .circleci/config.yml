@@ -22,8 +22,6 @@ jobs:
       - run:  make check-k8s-clusterrole
       - run:  make -C install/kubernetes
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C install/kubernetes' and submit your changes"; exit 1)
-      - run:  make -C examples/kubernetes/connectivity-check fmt
-      - run:  make -C examples/kubernetes/connectivity-check all
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
       - run:  helm install cilium ./install/kubernetes/cilium \
              --wait \

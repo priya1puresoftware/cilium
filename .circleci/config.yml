@@ -28,7 +28,7 @@ jobs:
       - run:  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list 
       - run:  sudo apt-get update 
       - run:  sudo apt-get install helm 
-      - run:  kubectl config view --raw > ~/.kube/config
+      - run:  sudo kubectl proxy --kubeconfig ~/.kube/config --port 80
       - run:  helm install cilium ./install/kubernetes/cilium 
       - run:  --wait 
       - run:  --namespace kube-system 

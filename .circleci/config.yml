@@ -30,8 +30,7 @@ jobs:
       - run:  sudo apt-get install helm 
       - run:  curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm64/kubectl"
       - run:  chmod +x ./kubectl
-      - run:  sudo mv ./kubectl /usr/local/bin/kubectl
-      - run:  kubectl config view --raw > ~/.kube/config    
+      - run:  sudo mv ./kubectl /usr/local/bin/kubectl   
       - run:  export KUBECONFIG=~/.kube/config
       - run:  helm install cilium ./install/kubernetes/cilium 
       - run:  --wait 

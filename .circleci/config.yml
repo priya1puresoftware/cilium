@@ -28,11 +28,17 @@ jobs:
       - run:  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list 
       - run:  sudo apt-get update 
       - run:  sudo apt-get install helm 
-      - run:  curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm64/kubectl"
+      - run:  sudo apt-get install curl && sudo apt-get install apt-transport-https
+      - run:  sudo apt install virtualbox virtualbox-ext-pack // did not worked on arm AWS instances
+      - run:  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64 or wget https://github.com/kubernetes/minikube/releases/download/v1.26.0/minikube-linux-arm64
+      - run:  sudo cp minikube-linux-arm64 /usr/local/bin/minikube
+      - run:  sudo chmod 755 /usr/local/bin/minikube
+      - run:  minikube version
+      - run:  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
+      - run:  kubectl version -o json
       - run:  minikube start
-      - run:  kubectl get po -A
       - run:  helm install cilium ./install/kubernetes/cilium 
       - run:  --wait 
       - run:  --namespace kube-system 

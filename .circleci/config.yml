@@ -30,7 +30,7 @@ jobs:
       - run:  sudo apt-get install helm 
       - run:  sudo apt-get install curl && sudo apt-get install apt-transport-https
       - run:  sudo apt-get install wget
-      - run:  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
+      - run:  wget https://storage.googleapis.com--namespace kube-system \/minikube/releases/latest/minikube-linux-arm64
       - run:  sudo cp minikube-linux-arm64 /usr/local/bin/minikube
       - run:  sudo chmod 755 /usr/local/bin/minikube
       - run:  minikube version
@@ -38,7 +38,9 @@ jobs:
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
-      - run:  helm install cilium ./install/kubernetes/cilium \
+      - run:  helm install cilium ./install/kubernetes/cilium 
+      - run:     --wait \
+      - run:     --namespace kube-system \
       - run:     --set nodeinit.enabled=true \
       - run:     --set kubeProxyReplacement=partial \ 
       - run:     --set socketLB.enabled=false \

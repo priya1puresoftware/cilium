@@ -33,6 +33,7 @@ jobs:
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl   
       - run:  export KUBECONFIG=~/.kube/config
       - run:  export KUBECONFIG=/etc/kubernet
+      - run:  kubectl cluster-info
       - run:  helm install cilium ./install/kubernetes/cilium 
       - run:  --wait 
       - run:  --namespace kube-system 

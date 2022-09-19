@@ -30,7 +30,7 @@ jobs:
       - run:  sudo apt-get install helm 
       - run:  sudo apt-get install curl && sudo apt-get install apt-transport-https
       - run:  sudo apt-get install wget
-      - run:  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64 or wget https://github.com/kubernetes/minikube/releases/download/v1.26.0/minikube-linux-arm64
+      - run:  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
       - run:  sudo cp minikube-linux-arm64 /usr/local/bin/minikube
       - run:  sudo chmod 755 /usr/local/bin/minikube
       - run:  minikube version

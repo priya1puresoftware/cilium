@@ -39,7 +39,6 @@ jobs:
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
       - run:  helm install cilium ./install/kubernetes/cilium 
-      - run:  --wait 
       - run:  --namespace kube-system 
       - run:  --set nodeinit.enabled=true 
       - run:  --set kubeProxyReplacement=partial 

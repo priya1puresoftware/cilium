@@ -32,6 +32,8 @@ jobs:
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  kubectl cluster-info dump
+      - run:  curl localhost:8080
+      - run:  kubectl config view
       - run:  kubectl cluster-info
       - run:  helm install cilium ./install/kubernetes/cilium 
       - run:  --wait 

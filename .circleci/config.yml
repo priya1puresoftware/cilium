@@ -39,11 +39,11 @@ jobs:
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
       - run:  helm install cilium ./install/kubernetes/cilium 
-      - run:  --namespace kube-system 
-      - run:  --set nodeinit.enabled=true 
-      - run:  --set kubeProxyReplacement=partial 
-      - run:  --set socketLB.enabled=false 
-      - run:  --set externalIPs.enabled=true 
+      - run:     --namespace kube-system 
+      - run:     --set nodeinit.enabled=true 
+      - run:     --set kubeProxyReplacement=partial 
+      - run:     --set socketLB.enabled=false 
+      - run:     --set externalIPs.enabled=true 
       - run:  --set nodePort.enabled=true 
       - run:  --set hostPort.enabled=true 
       - run:  --set bpf.masquerade=false 

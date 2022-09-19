@@ -19,42 +19,45 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
+      - run:  make check-k8s-clusterrole
+      - run:  make -C install/kubernetes
+      - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C install/kubernetes' and submit your changes"; exit 1)
+      - run:  make -C examples/kubernetes/connectivity-check fmt
+      - run:  make -C examples/kubernetes/connectivity-check all
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
-      
-      - run:  sudo ip -6 route add 2001:db8:1::/64 dev docker0
-      - run:  sudo sysctl net.ipv6.conf.default.forwarding=1
-      - run:  sudo sysctl net.ipv6.conf.all.forwarding=1
-      - run:  sudo systemctl restart docker
-      - run:  sudo apt-get update && \
-      - run:  sudo apt-get install helm && \
-      - run:  helm upgrade -i cilium ./install/kubernetes/cilium \
-      - run:  --namespace kube-system \
-      - run:  --set nodeinit.enabled=true \
-      - run:  --set kubeProxyReplacement=strict \
-      - run:  --set ipam.mode=kubernetes \
-      - run:  --set image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/cilium-ci \
-      - run:  --set image.tag=${{ steps.vars.outputs.tag }} \
-      - run:  --set image.pullPolicy=IfNotPresent \
-      - run:  --set image.useDigest=false \
-      - run:  --set hubble.relay.enabled=true \
-      - run:  --set hubble.relay.image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/hubble-relay-ci \
-      - run:  --set hubble.relay.image.tag=${{ steps.vars.outputs.tag }} \
-      - run:  --set hubble.relay.image.pullPolicy=IfNotPresent \
-      - run:  --set hubble.relay.image.useDigest=false \
-      - run:  --set operator.image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/operator \
-      - run:  --set operator.image.suffix=-ci \
-      - run:  --set operator.image.tag=${{ steps.vars.outputs.tag }} \
-      - run:  --set operator.image.pullPolicy=IfNotPresent \
-      - run:  --set operator.image.useDigest=false \
-      - run:  --set ipv6.enabled=true \
-      - run:  --set ipv4.enabled=false \
-      - run:  --set tunnel=disabled \
-      - run:  --set autoDirectNodeRoutes=true \
-      - run:  --set ipv6NativeRoutingCIDR=2001:db8:1::/64 \
-      - run:  --set ingressController.enabled=true
-      - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=${{ env.TIMEOUT }}
+      - run:  helm install cilium ./install/kubernetes/cilium \
+             --wait \
+             --namespace kube-system \
+             --set nodeinit.enabled=true \
+             --set kubeProxyReplacement=partial \
+             --set socketLB.enabled=false \
+             --set externalIPs.enabled=true \
+             --set nodePort.enabled=true \
+             --set hostPort.enabled=true \
+             --set bpf.masquerade=false \
+             --set ipam.mode=kubernetes \
+             --set image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/cilium-ci \
+             --set image.tag=${{ steps.vars.outputs.tag }} \
+             --set image.pullPolicy=IfNotPresent \
+             --set image.useDigest=false \
+             --set hubble.relay.enabled=true \
+             --set hubble.relay.image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/hubble-relay-ci \
+             --set hubble.relay.image.tag=${{ steps.vars.outputs.tag }} \
+             --set hubble.relay.image.pullPolicy=IfNotPresent \
+             --set hubble.relay.image.useDigest=false \
+             --set operator.image.repository=quay.io/${{ env.QUAY_ORGANIZATION_DEV }}/operator \
+             --set operator.image.suffix=-ci \
+             --set operator.image.tag=${{ steps.vars.outputs.tag }} \
+             --set operator.image.pullPolicy=IfNotPresent \
+             --set operator.image.useDigest=false \
+             --set prometheus.enabled=true \
+             --set operator.prometheus.enabled=true \
+             --set hubble.enabled=true \
+             --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}" \
+             --set ingressController.enabled=true
+      - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
       - run:  kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m
-      - run:  kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245 &
+      - run:  kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245
       - run:  kubectl apply -f ${{ env.CONFORMANCE_TEMPLATE }}
       - run:  kubectl wait --for=condition=Available --all deployment --timeout=${{ env.TIMEOUT }}
       

@@ -38,7 +38,7 @@ jobs:
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
-      - run:  helm install cilium ./install/kubernetes/cilium 
+      - run:  helm install cilium ./install/kubernetes/cilium \
                  --wait \
                  --namespace kube-system \
                  --set nodeinit.enabled=true \
@@ -49,7 +49,7 @@ jobs:
                  --set hostPort.enabled=true \
                  --set bpf.masquerade=false \
                  --set ipam.mode=kubernetes \
-                 --set image.repository=accuknox/${{ env.QUAY_ORGANIZATION_DEV }}/cilium-ci \ 
+                 --set image.repository=accuknox/cilium-ci \ 
                  --set image.tag=${{ steps.vars.outputs.tag }} \
                  --set image.pullPolicy=IfNotPresent \
                  --set image.useDigest=false \

@@ -20,7 +20,6 @@ jobs:
     steps:
       - checkout
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
-      - run:  sudo cat /etc/docker/daemon.json
       - run:  sudo ip -6 route add 2001:db8:1::/64 dev docker0
       - run:  sudo sysctl net.ipv6.conf.default.forwarding=1
       - run:  sudo sysctl net.ipv6.conf.all.forwarding=1

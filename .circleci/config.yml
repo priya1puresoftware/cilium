@@ -42,35 +42,35 @@ jobs:
       - run:  helm version
       - run:  helm repo add soluto https://charts.soluto.io
       - run:  helm upgrade --install kamus soluto/kamus
-      - run:  helm install cilium ./install/kubernetes/cilium \
-                 --wait \
-                 --namespace kube-system \
-                 --set nodeinit.enabled=true \
-                 --set kubeProxyReplacement=partial \ 
-                 --set socketLB.enabled=false \
-                 --set externalIPs.enabled=true \ 
-                 --set nodePort.enabled=true \
-                 --set hostPort.enabled=true \
-                 --set bpf.masquerade=false \
-                 --set ipam.mode=kubernetes \
-                 --set image.repository=accuknox/cilium-ci \ 
-                 --set image.tag=latest \
-                 --set image.pullPolicy=IfNotPresent \
-                 --set image.useDigest=false \
-                 --set hubble.relay.enabled=true \ 
-                 --set hubble.relay.image.repository=accuknox/hubble-relay-ci \ 
-                 --set hubble.relay.image.tag=latest \
-                 --set hubble.relay.image.pullPolicy=IfNotPresent \
-                 --set hubble.relay.image.useDigest=false \
-                 --set operator.image.repository=accuknox/operator \ 
-                 --set operator.image.suffix=-ci \
-                 --set operator.image.tag=latest \
-                 --set operator.image.pullPolicy=IfNotPresent \
-                 --set operator.image.useDigest=false \
-                 --set prometheus.enabled=true \
-                 --set operator.prometheus.enabled=true \
-                 --set hubble.enabled=true \
-                 --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}" \ 
+      - run:  helm install cilium ./install/kubernetes/cilium 
+                 --wait 
+                 --namespace kube-system 
+                 --set nodeinit.enabled=true 
+                 --set kubeProxyReplacement=partial  
+                 --set socketLB.enabled=false 
+                 --set externalIPs.enabled=true 
+                 --set nodePort.enabled=true 
+                 --set hostPort.enabled=true 
+                 --set bpf.masquerade=false 
+                 --set ipam.mode=kubernetes 
+                 --set image.repository=accuknox/cilium-ci  
+                 --set image.tag=latest 
+                 --set image.pullPolicy=IfNotPresent 
+                 --set image.useDigest=false 
+                 --set hubble.relay.enabled=true  
+                 --set hubble.relay.image.repository=accuknox/hubble-relay-ci  
+                 --set hubble.relay.image.tag=latest 
+                 --set hubble.relay.image.pullPolicy=IfNotPresent 
+                 --set hubble.relay.image.useDigest=false 
+                 --set operator.image.repository=accuknox/operator 
+                 --set operator.image.suffix=-ci 
+                 --set operator.image.tag=latest 
+                 --set operator.image.pullPolicy=IfNotPresent 
+                 --set operator.image.useDigest=false 
+                 --set prometheus.enabled=true 
+                 --set operator.prometheus.enabled=true 
+                 --set hubble.enabled=true 
+                 --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}"  
                  --set ingressController.enabled=true 
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
               # To make sure that cilium CRD is available (default timeout is 5m)

@@ -42,7 +42,6 @@ jobs:
       - run:  helm version
       - run:  helm repo add traefik-mesh https://helm.traefik.io/mesh
       - run:  helm repo update
-      - run:   
       - run:  helm install cilium ./install/kubernetes/cilium 
                  --wait 
                  --namespace kube-system 

@@ -22,8 +22,6 @@ jobs:
       - run:  make check-k8s-clusterrole
       - run:  make -C install/kubernetes
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C install/kubernetes' and submit your changes"; exit 1)
-      - run:  docker-image-no-clean
-      - run:  docker-operator-generic-image
       - run:  kind load docker-image --name chart-testing cilium/cilium:latest
       - run:  kind load docker-image --name chart-testing cilium/operator-generic:latest
       - run:  curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null 

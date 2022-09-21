@@ -40,7 +40,7 @@ jobs:
       - run:  pwd
       - run:  ls
       - run:  helm version
-      - run:  helm repo add cilium https://helm.cilium/cilium
+      - run:  helm repo add 
       - run:  helm repo update
       - run:  helm install cilium ./install/kubernetes/cilium 
                  --wait 

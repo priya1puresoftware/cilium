@@ -39,9 +39,7 @@ jobs:
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
-      - run:  helm repo update
-      - run:  helm upgrade -i cilium 
-            --namespace kube-system \
+      - run:  helm upgrade -i cilium --namespace kube-system 
             --set nodeinit.enabled=true \
             --set kubeProxyReplacement=strict \
             --set ipam.mode=kubernetes \

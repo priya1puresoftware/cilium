@@ -41,10 +41,9 @@ jobs:
       - run:  minikube start
       - run:  pwd
       - run:  ls
-      - run:  helm list
       - run:  helm version
-      - run:  helm --debug upgrade --install kamus soluto/kamus
-      - run:  helm upgrade -i cilium --namespace kube-system 
+      - run:  helm upgrade -i cilium 
+            --namespace kube-system 
             --set nodeinit.enabled=true \
             --set kubeProxyReplacement=strict \
             --set ipam.mode=kubernetes \

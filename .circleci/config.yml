@@ -44,29 +44,29 @@ jobs:
       - run:  helm version
       - run:  helm upgrade -i cilium 
             --namespace kube-system 
-            --set nodeinit.enabled=true \
-            --set kubeProxyReplacement=strict \
-            --set ipam.mode=kubernetes \
-            --set image.repository=accuknox/cilium-ci \
-            --set image.tag=latest \
-            --set image.pullPolicy=IfNotPresent \
-            --set image.useDigest=false \
-            --set hubble.relay.enabled=true \
-            --set hubble.relay.image.repository=accuknox/hubble-relay-ci \
-            --set hubble.relay.image.tag=latest \
-            --set hubble.relay.image.pullPolicy=IfNotPresent \
-            --set hubble.relay.image.useDigest=false \
-            --set operator.image.repository=accuknox/operator \
-            --set operator.image.suffix=-ci \
-            --set operator.image.tag=latest \
-            --set operator.image.pullPolicy=IfNotPresent \
-            --set operator.image.useDigest=false \
-            --set ipv6.enabled=true \
-            --set ipv4.enabled=false \
-            --set tunnel=disabled \
-            --set autoDirectNodeRoutes=true \
-            --set ipv6NativeRoutingCIDR=2001:db8:1::/64 \
-            --set ingressController.enabled=true &\
+            --set nodeinit.enabled=true 
+            --set kubeProxyReplacement=strict 
+            --set ipam.mode=kubernetes 
+            --set image.repository=accuknox/cilium-ci 
+            --set image.tag=latest 
+            --set image.pullPolicy=IfNotPresent 
+            --set image.useDigest=false 
+            --set hubble.relay.enabled=true 
+            --set hubble.relay.image.repository=accuknox/hubble-relay-ci 
+            --set hubble.relay.image.tag=latest 
+            --set hubble.relay.image.pullPolicy=IfNotPresent 
+            --set hubble.relay.image.useDigest=false 
+            --set operator.image.repository=accuknox/operator 
+            --set operator.image.suffix=-ci 
+            --set operator.image.tag=latest 
+            --set operator.image.pullPolicy=IfNotPresent 
+            --set operator.image.useDigest=false 
+            --set ipv6.enabled=true 
+            --set ipv4.enabled=false 
+            --set tunnel=disabled 
+            --set autoDirectNodeRoutes=true 
+            --set ipv6NativeRoutingCIDR=2001:db8:1::/64 
+            --set ingressController.enabled=true 
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=${{ env.TIMEOUT }}
       - run:  kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m 
       - run:  kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245 

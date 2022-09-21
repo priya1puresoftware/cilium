@@ -39,6 +39,9 @@ jobs:
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start
+      - run:  pwd
+      - run:  ls
+      - run:  helm list
       - run:  helm version
       - run:  helm --debug upgrade --install kamus soluto/kamus
       - run:  helm upgrade -i cilium --namespace kube-system 

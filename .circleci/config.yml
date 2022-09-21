@@ -42,7 +42,9 @@ jobs:
       - run:  pwd
       - run:  ls
       - run:  helm version
-      - run:  helm upgrade -i cilium 
+      - run:  helm repo add soluto https://charts.soluto.io
+      - run:  helm upgrade --install kamus soluto/kamus
+      - run:  helm upgrade -i cilium ./install/kubernetes/cilium
             --namespace kube-system 
             --set nodeinit.enabled=true 
             --set kubeProxyReplacement=strict 

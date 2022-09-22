@@ -12,9 +12,8 @@ jobs:
       cibw_build:
         type: string
         default: "cp37-*"
-        sleep_600:
-          requires:
-            - ios_package 
+        sleep_600
+           
            
     
 
@@ -93,6 +92,5 @@ workflows:
             parameters:
               cibw_build:
                 - "cp37*"
-              sleep_600:
-                 requires:
-                   - ios_package           
+              
+              

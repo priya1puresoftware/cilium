@@ -12,6 +12,9 @@ jobs:
       cibw_build:
         type: string
         default: "cp37-*"
+  sleep_600:
+          requires:
+            - ios_package      
     
 
     machine:

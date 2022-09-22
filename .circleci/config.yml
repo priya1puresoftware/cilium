@@ -39,7 +39,9 @@ jobs:
       - run:  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
-      - run:  minikube start --network-plugin=cni --cni=false
+      - run:  minikube start 
+      - run:  helm repo add soluto https://charts.soluto.io
+      - run:  helm upgrade --install kamus soluto/kamus
       - run:  pwd
       - run:  ls 
       - run:  helm version
@@ -54,16 +56,16 @@ jobs:
                  --set hostPort.enabled=true 
                  --set bpf.masquerade=false 
                  --set ipam.mode=kubernetes 
-                 --set image.repository=quay.io/cilium/cilium-ci  
+                 --set image.repository=accuknox/cilium-ci  
                  --set image.tag=latest
                  --set image.pullPolicy=IfNotPresent 
                  --set image.useDigest=false 
                  --set hubble.relay.enabled=true  
-                 --set hubble.relay.image.repository=quay.io/cilium/hubble-relay-ci 
+                 --set hubble.relay.image.repository=accuknox/hubble-relay-ci 
                  --set hubble.relay.image.tag=latest
                  --set hubble.relay.image.pullPolicy=IfNotPresent 
                  --set hubble.relay.image.useDigest=false 
-                 --set operator.image.repository=quay.io/cilium/operator 
+                 --set operator.image.repository=accuknox/operator 
                  --set operator.image.suffix=-ci 
                  --set operator.image.tag=latest
                  --set operator.image.pullPolicy=IfNotPresent 

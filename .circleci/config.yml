@@ -72,7 +72,6 @@ jobs:
                  --set ingressController.enabled=true 
 jobs:
   sleep_600:
-    <<: *node_config
     steps:
       - run: sleep 600
       - run:  kubectl get pods -A

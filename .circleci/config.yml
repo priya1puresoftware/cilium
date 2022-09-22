@@ -38,7 +38,7 @@ jobs:
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
       - run:  minikube start --network-plugin=cni --cni=false
       - run:  pwd
-      - run:  ls
+      - run:  ls 
       - run:  helm version
       - run:  helm install cilium ./install/kubernetes/cilium 
                  --wait 

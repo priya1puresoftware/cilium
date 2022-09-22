@@ -39,9 +39,7 @@ jobs:
       - run:  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
-      - run:  minikube start 
-      - run:  helm repo add soluto https://charts.soluto.io
-      - run:  helm upgrade --install kamus soluto/kamus
+      - run:  minikube start --network-plugin=cni --cni=false
       - run:  pwd
       - run:  ls 
       - run:  helm version

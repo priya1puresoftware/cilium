@@ -12,7 +12,7 @@ jobs:
       cibw_build:
         type: string
         default: "cp37-*"
-        sleep_600
+        sleep_600:
            
            
     

@@ -73,7 +73,7 @@ jobs:
                  --set hubble.enabled=true 
                  --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}"  
                  --set ingressController.enabled=true 
-      - run:  sleep=60
+      - run:  sleep=200
       - run:  kubectl get pods -A
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
       - run:  kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m

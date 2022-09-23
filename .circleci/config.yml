@@ -65,7 +65,7 @@ jobs:
                  --set hubble.relay.image.useDigest=false 
                  --set operator.image.repository=quay.io/cilium/operator 
                  --set operator.image.suffix=-ci 
-                 --set operator.image.tag=latest
+                 --set operator.image.tag=ac377a419e43b5b6b3cbbf86d62122f877e10ec0 
                  --set operator.image.pullPolicy=IfNotPresent 
                  --set operator.image.useDigest=false 
                  --set prometheus.enabled=true 

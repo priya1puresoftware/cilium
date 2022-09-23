@@ -63,7 +63,7 @@ jobs:
                  --set hubble.relay.image.tag=latest
                  --set hubble.relay.image.pullPolicy=IfNotPresent 
                  --set hubble.relay.image.useDigest=false 
-                 --set operator.image.repository=datadog/operator 
+                 --set operator.image.repository=quay.io/cilium/operator 
                  --set operator.image.suffix=-ci 
                  --set operator.image.tag=latest
                  --set operator.image.pullPolicy=IfNotPresent 

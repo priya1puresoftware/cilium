@@ -73,6 +73,8 @@ jobs:
                  --set hubble.enabled=true 
                  --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}"  
                  --set ingressController.enabled=true 
+      - run:  export DOCKER_CLI_EXPERIMENTAL=enabled
+      - run:  curl -sL https://git.io/goreleaser | bash -s -- --timeout=60sec
       - run:  sleep=250
       - run:  kubectl get pods -A
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m

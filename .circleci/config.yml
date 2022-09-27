@@ -13,7 +13,7 @@ jobs:
         type: string
         default: "cp37-*"
         sleep_250:
-        no_output_timeout: 30m
+        
            
            
     
@@ -76,14 +76,13 @@ jobs:
                  --set ingressController.enabled=true 
 
       - run:  sleep 250
-      - run:  no_output_timeout: 30m
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
               # To make sure that cilium CRD is available (default timeout is 5m)
               # https://github.com/cilium/cilium/blob/master/operator/crd.go#L34
       - run:  kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m
       - run:  kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245 & 
       - run:  kubectl apply -f examples/kubernetes/connectivity-check/connectivity-check.yaml
-      - run:  kubectl wait --for=condition=Available --all deployment --timeout=8m
+      - run:  kubectl wait --for=condition=Available --all deployment --timeout=2m
      
       
 workflows:

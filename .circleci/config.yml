@@ -75,6 +75,7 @@ jobs:
                  --set ingressController.enabled=true 
 
       - run:  sleep 250
+      - run:  no_output_timeout: 30m
       - run:  kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
               # To make sure that cilium CRD is available (default timeout is 5m)
               # https://github.com/cilium/cilium/blob/master/operator/crd.go#L34

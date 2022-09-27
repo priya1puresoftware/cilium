@@ -25,9 +25,9 @@ jobs:
       - run:  make check-k8s-clusterrole
       - run:  make -C install/kubernetes
       - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C install/kubernetes' and submit your changes"; exit 1)
-      - run:  make -C examples/kubernetes/connectivity-check fmt
-      - run:  make -C examples/kubernetes/connectivity-check all
-      - run:  test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1)
+      - run:  for image in cilium-ci operator-generic-ci hubble-relay-ci ; do
+        until docker manifest inspect quay.io/cilium/$image:1fed7e8f586de2c1cce67fcdf0928c4fdc69ed7d &> /dev/null; do sleep 45s; done
+  
       - run:  curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null 
       - run:  sudo apt-get install apt-transport-https --yes 
       - run:  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list 

@@ -74,7 +74,7 @@ jobs:
           no_output_timeout: 60m
           command: |
              kubectl get pods -A
-             kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
+             kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=9m
              kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m
              kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245 & 
              kubectl apply -f examples/kubernetes/connectivity-check/connectivity-check.yaml

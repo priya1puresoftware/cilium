@@ -32,6 +32,8 @@ jobs:
       - run:  sudo cp minikube-linux-arm64 /usr/local/bin/minikube
       - run:  sudo chmod 755 /usr/local/bin/minikube
       - run:  minikube version
+      - run:  minikube start --network-plugin=cni --memory=4096
+      - run:  minikube ssh -- sudo mount bpffs -t bpf /sys/fs/bpf
       - run:  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
       - run:  chmod +x ./kubectl
       - run:  sudo mv ./kubectl /usr/local/bin/kubectl
@@ -73,6 +75,9 @@ jobs:
           name: kubectl
           no_output_timeout: 60m
           command: |
+             kubectl create -f https://raw.githubusercontent.com/cilium/cilium/v1.6/install/kubernetes/quick-install.yaml
+             kubectl -n kube-system get pods --watch
+             kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/v1.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
              kubectl get pods -A
              kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=9m
              kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m

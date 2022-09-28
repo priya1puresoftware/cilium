@@ -217,20 +217,20 @@ jobs:
               bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
-              curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null 
-              sudo apt-get install apt-transport-https --yes 
-              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list 
-              sudo apt-get update 
-              sudo apt-get install helm 
-              sudo apt-get install curl && sudo apt-get install apt-transport-https
-              sudo apt-get install wget
+              curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null 
+              apt-get install apt-transport-https --yes 
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list 
+              apt-get update 
+              apt-get install helm 
+              apt-get install curl && sudo apt-get install apt-transport-https
+              apt-get install wget
               wget https://github.com/kubernetes/minikube/releases/download/v1.26.0/minikube-linux-arm64
-              sudo cp minikube-linux-arm64 /usr/local/bin/minikube
-              sudo chmod 755 /usr/local/bin/minikube
+              cp minikube-linux-arm64 /usr/local/bin/minikube
+              chmod 755 /usr/local/bin/minikube
               minikube version
               curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
               chmod +x ./kubectl
-              sudo mv ./kubectl /usr/local/bin/kubectl
+              mv ./kubectl /usr/local/bin/kubectl
               minikube start --nodes 3 -p multinode-demo
               pwd
               ls 

@@ -75,7 +75,6 @@ jobs:
           name: kubectl
           no_output_timeout: 60m
           command: |
-             kubectl -n kube-system get pods --watch
              kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/v1.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
              kubectl get pods -A
              kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=9m

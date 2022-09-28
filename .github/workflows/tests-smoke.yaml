@@ -217,13 +217,65 @@ jobs:
               bash -exc 'apt-get update && apt-get -y install python3 python3-pip python3-venv curl && \
               python3 -m pip install virtualenv && python3 -m venv py38-venv && \
               source py38-venv/bin/activate && \
-              apt install apt-transport-https ca-certificates curl software-properties-common && \
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
-              add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable" && \
-              apt-cache policy docker-ce && \
-              apt install docker-ce && \
-              make check-k8s-clusterrole && \
-              make -C examples/kubernetes/connectivity-check fmt && \
-              make -C examples/kubernetes/connectivity-check all && \ 
-              test -z "$(git status --porcelain)" || (echo "please run 'make -C examples/kubernetes/connectivity-check fmt all' and submit your changes"; exit 1) && \
+              make check-k8s-clusterrole
+              make -C install/kubernetes
+              test -z "$(git status --porcelain)" || (echo "please run 'make -C install/kubernetes' and submit your changes"; exit 1)
+              curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null 
+              sudo apt-get install apt-transport-https --yes 
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list 
+              sudo apt-get update 
+              sudo apt-get install helm 
+              sudo apt-get install curl && sudo apt-get install apt-transport-https
+              sudo apt-get install wget
+              wget https://github.com/kubernetes/minikube/releases/download/v1.26.0/minikube-linux-arm64
+              sudo cp minikube-linux-arm64 /usr/local/bin/minikube
+              sudo chmod 755 /usr/local/bin/minikube
+              minikube version
+              curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/arm64/kubectl
+              chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin/kubectl
+              minikube start --nodes 3 -p multinode-demo
+              pwd
+              ls 
+              helm version
+              helm install cilium ./install/kubernetes/cilium 
+                 --wait 
+                 --namespace kube-system 
+                 --set nodeinit.enabled=true 
+                 --set kubeProxyReplacement=partial  
+                 --set socketLB.enabled=false 
+                 --set externalIPs.enabled=true 
+                 --set nodePort.enabled=true 
+                 --set hostPort.enabled=true 
+                 --set bpf.masquerade=false 
+                 --set ipam.mode=kubernetes 
+                 --set image.repository=quay.io/cilium/cilium-ci  
+                 --set image.tag=latest
+                 --set image.pullPolicy=IfNotPresent 
+                 --set image.useDigest=false 
+                 --set hubble.relay.enabled=true  
+                 --set hubble.relay.image.repository=quay.io/cilium/hubble-relay-ci 
+                 --set hubble.relay.image.tag=latest
+                 --set hubble.relay.image.pullPolicy=IfNotPresent 
+                 --set hubble.relay.image.useDigest=false 
+                 --set operator.image.repository=quay.io/cilium/operator 
+                 --set operator.image.suffix=-ci 
+                 --set operator.image.tag=latest
+                 --set operator.image.pullPolicy=IfNotPresent 
+                 --set operator.image.useDigest=false 
+                 --set prometheus.enabled=true 
+                 --set operator.prometheus.enabled=true 
+                 --set hubble.enabled=true 
+                 --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,http}"  
+                 --set ingressController.enabled=true 
+
+              sleep 250
+              kubectl get pods -A
+              kubectl wait -n kube-system --for=condition=Ready --all pod --timeout=5m
+              # To make sure that cilium CRD is available (default timeout is 5m)
+              # https://github.com/cilium/cilium/blob/master/operator/crd.go#L34
+              kubectl wait --for condition=Established crd/ciliumnetworkpolicies.cilium.io --timeout=5m
+              kubectl port-forward -n kube-system deployment/hubble-relay 4245:4245 & 
+              kubectl apply -f examples/kubernetes/connectivity-check/connectivity-check.yaml
+              kubectl wait --for=condition=Available --all deployment --timeout=5m
               deactivate'
